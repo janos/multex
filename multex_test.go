@@ -70,16 +70,22 @@ func TestMultipleKeysLocking(t *testing.T) {
 
 func BenchmarkMultex(b *testing.B) {
 	mu := multex.New()
+	var r string
 	for i := 0; i < b.N; i++ {
 		mu.Lock("")
+		r = ""
 		mu.Unlock("")
 	}
+	_ = r
 }
 
 func BenchmarkMutex(b *testing.B) {
 	var mu sync.Mutex
+	var r string
 	for i := 0; i < b.N; i++ {
 		mu.Lock()
+		r = ""
 		mu.Unlock()
 	}
+	_ = r
 }
