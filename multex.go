@@ -3,7 +3,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package mutex provides multiple mutual exclusion lock. The name is
+// Package multex provides multiple mutual exclusion lock. The name is
 // constructed by combining a common name for mutual exclusion locks, Mutex, and
 // word multiple, which is a property of this specific implementation. Multex
 // locking and unlocking for a single key is a few times slower then locking
