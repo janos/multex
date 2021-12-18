@@ -15,8 +15,8 @@ Performance comparison of Multex with a single key and sync.Mutex can be done
 by running benchmarks in this package.
 
 ```
-BenchmarkMultex-8       17200414                66.0 ns/op             0 B/op          0 allocs/op
-BenchmarkMutex-8        95875299                11.8 ns/op             0 B/op          0 allocs/op
+BenchmarkMultex-10      39488458                26.89 ns/op            0 B/op          0 allocs/op
+BenchmarkMutex-10       86903780                13.41 ns/op            0 B/op          0 allocs/op
 ```
 
 ## Installation

@@ -17,22 +17,22 @@ import (
 )
 
 // Multex is a mutual exclusion lock with support for multiple keys.
-type Multex struct {
+type Multex[K comparable] struct {
 	c *sync.Cond
-	s map[string]struct{}
+	s map[K]struct{}
 }
 
 // New constructs a new Multex instance.
-func New() (m *Multex) {
-	return &Multex{
+func New[K comparable]() (m *Multex[K]) {
+	return &Multex[K]{
 		c: sync.NewCond(new(sync.Mutex)),
-		s: make(map[string]struct{}),
+		s: make(map[K]struct{}),
 	}
 }
 
 // Lock a specific key in Multex. This method is blocking until Unlock is called
 // with the same key.
-func (m *Multex) Lock(key string) {
+func (m *Multex[K]) Lock(key K) {
 	m.c.L.Lock()
 
 	for _, ok := m.s[key]; ok; _, ok = m.s[key] {
@@ -44,7 +44,7 @@ func (m *Multex) Lock(key string) {
 }
 
 // Unlock a specific key in Multex.
-func (m *Multex) Unlock(key string) {
+func (m *Multex[K]) Unlock(key K) {
 	m.c.L.Lock()
 
 	delete(m.s, key)

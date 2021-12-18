@@ -14,7 +14,7 @@ import (
 )
 
 func TestSingleKeyLocking(t *testing.T) {
-	mu := multex.New()
+	mu := multex.New[string]()
 
 	delay := 100 * time.Millisecond
 
@@ -34,42 +34,42 @@ func TestSingleKeyLocking(t *testing.T) {
 }
 
 func TestMultipleKeysLocking(t *testing.T) {
-	mu := multex.New()
+	mu := multex.New[int]()
 
-	mu.Lock("key1")
-	mu.Lock("key2")
+	mu.Lock(1)
+	mu.Lock(2)
 
 	unlocked1 := make(chan struct{})
 	go func() {
-		mu.Lock("key1")
-		defer mu.Unlock("key1")
+		mu.Lock(1)
+		defer mu.Unlock(1)
 
 		close(unlocked1)
 	}()
 
 	unlocked2 := make(chan struct{})
 	go func() {
-		mu.Lock("key2")
-		defer mu.Unlock("key2")
+		mu.Lock(2)
+		defer mu.Unlock(2)
 
 		close(unlocked2)
 	}()
 
-	mu.Unlock("key1")
+	mu.Unlock(1)
 	<-unlocked1
 
 	select {
 	case <-unlocked2:
-		t.Error("key2 unlocked")
+		t.Error("key 2 unlocked")
 	default:
 	}
 
-	mu.Unlock("key2")
+	mu.Unlock(2)
 	<-unlocked2
 }
 
 func BenchmarkMultex(b *testing.B) {
-	mu := multex.New()
+	mu := multex.New[string]()
 	var r string
 	for i := 0; i < b.N; i++ {
 		mu.Lock("")
